@@ -343,145 +343,190 @@ body.light{--bg:#f4f6fb;--panel:#ffffff;--border:#d8deeb;--text:#172033;--muted:
 </body>
 </html>
 
-<!-- NOVA LIVE CLOCK + DAILY PROVERB -->
+<!-- NOVA TOP DAILY DASHBOARD -->
 <style>
-  .nova-daily-card {
-    margin: 18px 0;
+  .nova-top-bar {
+    background: linear-gradient(135deg, #11152e, #292354, #182b50);
+    color: #fff;
     padding: 20px;
-    border-radius: 18px;
-    color: #ffffff;
-    background: linear-gradient(135deg, #25205c, #5145a8, #273d76);
+    border-radius: 0 0 22px 22px;
     font-family: Arial, sans-serif;
-    box-shadow: 0 8px 24px rgba(30, 20, 90, 0.25);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
   }
 
-  .nova-daily-label {
-    font-size: 12px;
-    letter-spacing: 2px;
-    opacity: 0.8;
-    text-transform: uppercase;
+  .nova-brand {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #c4b5fd;
   }
 
-  #novaLiveTime {
-    font-size: clamp(30px, 8vw, 44px);
+  .nova-subtitle {
+    font-size: 14px;
+    color: #d9d6ff;
+    margin-top: 4px;
+  }
+
+  .nova-top-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .nova-info-pill {
+    flex: 1 1 125px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    padding: 12px;
+    border-radius: 30px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .nova-info-value {
     font-weight: bold;
-    margin: 12px 0 5px;
-    font-variant-numeric: tabular-nums;
-  }
-
-  #novaLiveDate {
+    margin-top: 5px;
     font-size: 15px;
-    line-height: 1.7;
-    opacity: 0.95;
   }
 
-  .nova-proverb-box {
-    margin-top: 18px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255,255,255,0.25);
-  }
-
-  #novaDailyProverb {
-    font-size: 16px;
+  .nova-greeting {
+    margin-top: 20px;
+    color: #e5ddff;
+    font-weight: bold;
     line-height: 1.6;
-    margin: 9px 0 5px;
   }
 
-  #novaProverbAuthor {
-    font-size: 12px;
-    opacity: 0.75;
+  .nova-proverb {
+    border-top: 1px solid rgba(255,255,255,.18);
+    padding-top: 13px;
+    margin-top: 13px;
+    color: #dedbff;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 480px) {
+    .nova-top-bar { padding: 16px; }
+    .nova-info-pill { flex-basis: 100px; }
+    .nova-brand { font-size: 23px; }
   }
 </style>
 
-<section class="nova-daily-card">
-  <div class="nova-daily-label">NOVA · Your Daily Moment</div>
+<header class="nova-top-bar">
+  <div class="nova-brand">✦ NOVA</div>
+  <div class="nova-subtitle">Personal Knowledge Engine</div>
 
-  <div id="novaLiveTime">--:--:--</div>
-  <div id="novaLiveDate">Loading date...</div>
+  <div class="nova-top-info">
+    <div class="nova-info-pill">
+      🕒 Live Time
+      <div class="nova-info-value" id="novaTopTime">--:--:--</div>
+    </div>
 
-  <div class="nova-proverb-box">
-    <div class="nova-daily-label">✨ Proverb of the Day</div>
-    <div id="novaDailyProverb">Loading today's wisdom...</div>
-    <div id="novaProverbAuthor">A daily reminder</div>
+    <div class="nova-info-pill">
+      🗓️ Date & Day
+      <div class="nova-info-value" id="novaTopDate">Loading...</div>
+    </div>
+
+    <div class="nova-info-pill">
+      🔥 Streak
+      <div class="nova-info-value" id="novaTopStreak">1 day</div>
+    </div>
   </div>
-</section>
+
+  <div class="nova-greeting" id="novaTopGreeting">
+    ✨ Welcome to NOVA!
+  </div>
+
+  <div class="nova-proverb">
+    📖 <strong>Proverb of the Day</strong>
+    <div id="novaTopProverb">Loading today's wisdom...</div>
+  </div>
+</header>
 
 <script>
 (function () {
-  const proverbs = [
-    "Great things grow from small, consistent steps.",
-    "Learning today creates opportunities tomorrow.",
-    "Patience helps good work become great.",
-    "A curious mind finds lessons everywhere.",
+  const sayings = [
     "Every expert was once a beginner.",
-    "Discipline turns goals into daily progress.",
-    "Mistakes are lessons when you learn from them.",
-    "Knowledge becomes powerful when you use it.",
-    "A little progress each day adds up.",
-    "The best time to learn is whenever you can.",
-    "Success begins with the courage to start.",
-    "Think clearly, act kindly, and keep learning.",
-    "Focus on what you can improve today.",
-    "A wise question is the beginning of learning.",
-    "Consistency is more valuable than a perfect start.",
-    "Use your time to build something meaningful.",
-    "Small efforts can create lasting change.",
-    "Listen carefully; every person can teach you something.",
-    "Good habits make difficult tasks easier.",
-    "Be willing to learn, unlearn, and learn again.",
-    "Your future benefits from the effort you make today.",
-    "Solve one problem at a time.",
-    "Creativity begins when you ask a new question.",
+    "Small steps every day lead to progress.",
     "Knowledge grows when it is shared.",
-    "Keep your goals clear and your efforts steady.",
-    "Be proud of progress, not just results.",
-    "A thoughtful decision is better than a rushed one.",
-    "Make today useful, even in a small way.",
-    "Kindness and knowledge are both worth sharing.",
-    "Every new day offers another chance to improve.",
-    "Finish the day having learned something new."
+    "Patience and practice build skill.",
+    "Learning today creates opportunities tomorrow.",
+    "A curious mind discovers new possibilities.",
+    "Mistakes can become valuable lessons.",
+    "Consistency matters more than a perfect start.",
+    "Great achievements begin with small actions.",
+    "Use your time to learn something meaningful.",
+    "Good habits make difficult tasks easier.",
+    "A thoughtful question begins a journey of learning.",
+    "Focus on progress, not perfection.",
+    "Keep learning and keep improving.",
+    "A little effort each day adds up.",
+    "Wisdom begins with listening.",
+    "Hard problems become easier when tackled step by step.",
+    "Be willing to learn something new.",
+    "Today's practice builds tomorrow's confidence.",
+    "Share knowledge and help others grow.",
+    "Creativity starts with asking questions.",
+    "A clear goal gives effort direction.",
+    "Make each day an opportunity to improve.",
+    "Success grows through patience and persistence.",
+    "Think carefully, act kindly, and learn continuously.",
+    "Every challenge can teach you something.",
+    "Good decisions begin with good information.",
+    "Start where you are and keep moving forward.",
+    "Time used wisely becomes an investment.",
+    "Be proud of the effort you make.",
+    "Tomorrow starts with what you learn today."
   ];
 
-  function updateNovaClock() {
+  function updateTopBar() {
     const now = new Date();
 
-    const time = now.toLocaleTimeString("en-IN", {
+    const timeText = now.toLocaleTimeString("en-IN", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
       hour12: true
     });
 
-    const date = now.toLocaleDateString("en-IN", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
+    const dateText = now.toLocaleDateString("en-IN", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
       year: "numeric"
     });
 
-    document.getElementById("novaLiveTime").textContent = time;
-    document.getElementById("novaLiveDate").textContent = date;
+    document.getElementById("novaTopTime").textContent = timeText;
+    document.getElementById("novaTopDate").textContent = dateText;
 
-    // Use the device's local calendar date to select today's proverb.
-    const dayStart = new Date(
-      now.getFullYear(), 0, 0
-    );
+    const hour = now.getHours();
+    let greeting;
+
+    if (hour < 12) {
+      greeting = "🌅 Good morning! Make today a learning day.";
+    } else if (hour < 17) {
+      greeting = "☀️ Good afternoon! Keep making progress.";
+    } else {
+      greeting = "🌙 Good evening! Review today's learning.";
+    }
+
+    document.getElementById("novaTopGreeting").textContent = greeting;
+
+    // Select a proverb consistently for each local calendar day.
+    const start = new Date(now.getFullYear(), 0, 0);
     const dayNumber = Math.floor(
       (new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        - dayStart) / 86400000
+        - start) / 86400000
     );
 
-    const index = (dayNumber - 1) % proverbs.length;
-
-    document.getElementById("novaDailyProverb").textContent =
-      "“" + proverbs[index] + "”";
-
-    document.getElementById("novaProverbAuthor").textContent =
-      "NOVA Daily Wisdom";
+    document.getElementById("novaTopProverb").textContent =
+      "“" + sayings[(dayNumber - 1) % sayings.length] + "”";
   }
 
-  updateNovaClock();
-  setInterval(updateNovaClock, 1000);
+  updateTopBar();
+  setInterval(updateTopBar, 1000);
 })();
 </script>
-<!-- END NOVA LIVE CLOCK -->
+<!-- END NOVA TOP DAILY DASHBOARD -->
+
