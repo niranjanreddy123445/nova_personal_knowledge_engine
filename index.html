@@ -342,3 +342,146 @@ body.light{--bg:#f4f6fb;--panel:#ffffff;--border:#d8deeb;--text:#172033;--muted:
 
 </body>
 </html>
+
+<!-- NOVA LIVE CLOCK + DAILY PROVERB -->
+<style>
+  .nova-daily-card {
+    margin: 18px 0;
+    padding: 20px;
+    border-radius: 18px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #25205c, #5145a8, #273d76);
+    font-family: Arial, sans-serif;
+    box-shadow: 0 8px 24px rgba(30, 20, 90, 0.25);
+  }
+
+  .nova-daily-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    text-transform: uppercase;
+  }
+
+  #novaLiveTime {
+    font-size: clamp(30px, 8vw, 44px);
+    font-weight: bold;
+    margin: 12px 0 5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  #novaLiveDate {
+    font-size: 15px;
+    line-height: 1.7;
+    opacity: 0.95;
+  }
+
+  .nova-proverb-box {
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+  }
+
+  #novaDailyProverb {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 9px 0 5px;
+  }
+
+  #novaProverbAuthor {
+    font-size: 12px;
+    opacity: 0.75;
+  }
+</style>
+
+<section class="nova-daily-card">
+  <div class="nova-daily-label">NOVA · Your Daily Moment</div>
+
+  <div id="novaLiveTime">--:--:--</div>
+  <div id="novaLiveDate">Loading date...</div>
+
+  <div class="nova-proverb-box">
+    <div class="nova-daily-label">✨ Proverb of the Day</div>
+    <div id="novaDailyProverb">Loading today's wisdom...</div>
+    <div id="novaProverbAuthor">A daily reminder</div>
+  </div>
+</section>
+
+<script>
+(function () {
+  const proverbs = [
+    "Great things grow from small, consistent steps.",
+    "Learning today creates opportunities tomorrow.",
+    "Patience helps good work become great.",
+    "A curious mind finds lessons everywhere.",
+    "Every expert was once a beginner.",
+    "Discipline turns goals into daily progress.",
+    "Mistakes are lessons when you learn from them.",
+    "Knowledge becomes powerful when you use it.",
+    "A little progress each day adds up.",
+    "The best time to learn is whenever you can.",
+    "Success begins with the courage to start.",
+    "Think clearly, act kindly, and keep learning.",
+    "Focus on what you can improve today.",
+    "A wise question is the beginning of learning.",
+    "Consistency is more valuable than a perfect start.",
+    "Use your time to build something meaningful.",
+    "Small efforts can create lasting change.",
+    "Listen carefully; every person can teach you something.",
+    "Good habits make difficult tasks easier.",
+    "Be willing to learn, unlearn, and learn again.",
+    "Your future benefits from the effort you make today.",
+    "Solve one problem at a time.",
+    "Creativity begins when you ask a new question.",
+    "Knowledge grows when it is shared.",
+    "Keep your goals clear and your efforts steady.",
+    "Be proud of progress, not just results.",
+    "A thoughtful decision is better than a rushed one.",
+    "Make today useful, even in a small way.",
+    "Kindness and knowledge are both worth sharing.",
+    "Every new day offers another chance to improve.",
+    "Finish the day having learned something new."
+  ];
+
+  function updateNovaClock() {
+    const now = new Date();
+
+    const time = now.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    });
+
+    const date = now.toLocaleDateString("en-IN", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+
+    document.getElementById("novaLiveTime").textContent = time;
+    document.getElementById("novaLiveDate").textContent = date;
+
+    // Use the device's local calendar date to select today's proverb.
+    const dayStart = new Date(
+      now.getFullYear(), 0, 0
+    );
+    const dayNumber = Math.floor(
+      (new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        - dayStart) / 86400000
+    );
+
+    const index = (dayNumber - 1) % proverbs.length;
+
+    document.getElementById("novaDailyProverb").textContent =
+      "“" + proverbs[index] + "”";
+
+    document.getElementById("novaProverbAuthor").textContent =
+      "NOVA Daily Wisdom";
+  }
+
+  updateNovaClock();
+  setInterval(updateNovaClock, 1000);
+})();
+</script>
+<!-- END NOVA LIVE CLOCK -->
