@@ -564,6 +564,63 @@ body.light{--bg:#f4f6fb;--panel:#ffffff;--border:#d8deeb;--text:#172033;--muted:
 })();
 </script>
 
+/* NOVA Advanced Dashboard statistics */
+(function () {
+  function updateAdvancedDashboard() {
+    try {
+      const notes = JSON.parse(
+        localStorage.getItem("nova_knowledge_notes_v1") || "[]"
+      );
+      const tasks = JSON.parse(
+        localStorage.getItem("nova_v4_tasks") || "[]"
+      );
+
+      const safeNotes = Array.isArray(notes) ? notes : [];
+      const safeTasks = Array.isArray(tasks) ? tasks : [];
+
+      const words = safeNotes.reduce((total, note) => {
+        const text = String(note.title || "") + " " +
+                     String(note.content || "");
+        return total + text.trim().split(/\s+/).filter(Boolean).length;
+      }, 0);
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      setText("novaDashNotes", safeNotes.length);
+      setText(
+        "novaDashFavorites",
+        safeNotes.filter(note => note.favorite).length
+      );
+      setText("novaDashWords", words.toLocaleString());
+
+      const completed = safeTasks.filter(task => task.done).length;
+      const total = safeTasks.length;
+      const percent = total
+        ? Math.round(completed / total * 100)
+        : 0;
+
+      setText(
+        "novaDashProgressText",
+        total
+          ? `${completed} of ${total} tasks completed (${percent}%)`
+          : "Add a study task to start tracking your progress."
+      );
+
+      const bar = document.getElementById("novaDashProgressBar");
+      if (bar) bar.style.width = percent + "%";
+
+    } catch (error) {
+      console.warn("NOVA dashboard update failed:", error);
+    }
+  }
+
+  updateAdvancedDashboard();
+  setInterval(updateAdvancedDashboard, 2000);
+})();
+
 <script>
 (() => {
  const $=id=>document.getElementById(id), key='nova_v4_';
